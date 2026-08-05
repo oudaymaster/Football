@@ -1,0 +1,286 @@
+/* ─── Reset & Base ─── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --green-dark:  #1a5c20;
+  --green-mid:   #226b29;
+  --green-light: #2d8a35;
+  --blue:        #4a8fe2;
+  --blue-dark:   #1a5fa0;
+  --red:         #e24b4a;
+  --red-dark:    #a02020;
+  --white:       #ffffff;
+  --off-white:   #f0f0f0;
+  --text-muted:  rgba(255,255,255,0.6);
+  --card-bg:     rgba(0,0,0,0.55);
+  --radius:      12px;
+  --radius-sm:   8px;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: #111;
+  color: var(--white);
+  overflow: hidden;
+}
+
+/* ─── Screens ─── */
+.screen {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.screen.active { display: flex; }
+
+/* ─── Menu Screen ─── */
+#menu-screen {
+  background: linear-gradient(160deg, var(--green-dark) 0%, #0d3b12 100%);
+}
+
+.pitch-bg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255,255,255,0.03) 0px,
+      rgba(255,255,255,0.03) 60px,
+      transparent 60px,
+      transparent 120px
+    );
+  pointer-events: none;
+}
+
+.menu-card {
+  position: relative;
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: var(--radius);
+  padding: 36px 40px;
+  max-width: 420px;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  text-align: center;
+}
+
+.logo { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.ball-icon { font-size: 48px; line-height: 1; }
+.logo h1 { font-size: 32px; font-weight: 700; letter-spacing: -0.5px; }
+.tagline { font-size: 14px; color: var(--text-muted); }
+
+.mode-buttons { display: flex; flex-direction: column; gap: 12px; }
+
+.mode-btn {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: var(--radius-sm);
+  color: var(--white);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, transform 0.1s;
+  text-align: left;
+  width: 100%;
+}
+.mode-btn:hover {
+  background: rgba(255,255,255,0.15);
+  border-color: rgba(255,255,255,0.3);
+  transform: translateY(-1px);
+}
+.mode-btn:active { transform: scale(0.98); }
+.mode-btn.secondary { background: rgba(255,255,255,0.04); }
+
+.mode-btn.small {
+  padding: 12px 24px;
+  justify-content: center;
+  flex: 1;
+}
+
+.mode-icon { font-size: 26px; flex-shrink: 0; }
+.mode-label { font-size: 17px; font-weight: 600; }
+.mode-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; display: block; }
+
+.mode-btn .mode-label,
+.mode-btn .mode-sub {
+  display: block;
+}
+
+.rules {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.controls-legend {
+  background: rgba(255,255,255,0.05);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+}
+.ctrl-row { font-size: 13px; color: var(--text-muted); }
+.ctrl-row strong { color: var(--white); }
+
+/* ─── Game Screen ─── */
+#game-screen {
+  background: #111;
+  gap: 0;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 12px;
+}
+
+.game-ui {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 700px;
+  padding: 0 4px 10px;
+}
+
+.team-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.team-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.team-dot.blue { background: var(--blue); }
+.team-dot.red  { background: var(--red); }
+
+.score-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.score {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.timer {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.canvas-wrap {
+  position: relative;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 2px solid rgba(255,255,255,0.1);
+  max-width: 700px;
+  width: 100%;
+}
+
+#game-canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.goal-flash {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  font-weight: 900;
+  letter-spacing: 4px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.1s;
+}
+.goal-flash.show { opacity: 1; animation: flashAnim 1.4s ease-out forwards; }
+.goal-flash.hidden { display: none; }
+
+@keyframes flashAnim {
+  0%   { opacity: 1; transform: scale(1.4); }
+  30%  { opacity: 1; transform: scale(1); }
+  80%  { opacity: 0.9; }
+  100% { opacity: 0; }
+}
+
+.bottom-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 700px;
+  padding: 10px 4px 0;
+}
+
+.back-btn {
+  padding: 8px 16px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: var(--radius-sm);
+  color: var(--white);
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.back-btn:hover { background: rgba(255,255,255,0.15); }
+
+.status-msg {
+  font-size: 14px;
+  font-weight: 600;
+  color: #f5c518;
+  min-height: 20px;
+  text-align: center;
+}
+
+/* ─── End Screen ─── */
+#end-screen {
+  background: rgba(0,0,0,0.85);
+}
+
+.end-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: var(--radius);
+  padding: 40px 48px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  max-width: 340px;
+  width: 90%;
+}
+
+.trophy { font-size: 56px; }
+.end-card h2 { font-size: 26px; font-weight: 700; }
+.final-score { font-size: 40px; font-weight: 700; letter-spacing: 4px; color: var(--off-white); }
+.end-buttons { display: flex; gap: 12px; width: 100%; margin-top: 8px; }
+
+/* ─── Responsive ─── */
+@media (max-width: 480px) {
+  .menu-card { padding: 24px 20px; }
+  .logo h1 { font-size: 26px; }
+  .score { font-size: 20px; }
+  .end-card { padding: 28px 24px; }
+}

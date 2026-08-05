@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2D Soccer</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- MENU SCREEN -->
+  <div id="menu-screen" class="screen active">
+    <div class="pitch-bg"></div>
+    <div class="menu-card">
+      <div class="logo">
+        <span class="ball-icon">⚽</span>
+        <h1>2D Soccer</h1>
+        <p class="tagline">Pick a mode and kick off</p>
+      </div>
+      <div class="mode-buttons">
+        <button class="mode-btn" id="btn-1v1">
+          <span class="mode-icon">👥</span>
+          <span class="mode-label">1 v 1</span>
+          <span class="mode-sub">Two players · one keyboard</span>
+        </button>
+        <button class="mode-btn" id="btn-ai">
+          <span class="mode-icon">🤖</span>
+          <span class="mode-label">vs AI</span>
+          <span class="mode-sub">Play against the computer</span>
+        </button>
+      </div>
+      <div class="rules">
+        First to 3 goals wins &nbsp;·&nbsp; 90-second matches
+      </div>
+      <div class="controls-legend">
+        <div class="ctrl-row"><strong>Player 1</strong> — WASD to move &nbsp;·&nbsp; Space to kick</div>
+        <div class="ctrl-row"><strong>Player 2</strong> — Arrow keys &nbsp;·&nbsp; Enter to kick</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GAME SCREEN -->
+  <div id="game-screen" class="screen">
+    <div class="game-ui">
+      <div class="team-info team-left">
+        <span class="team-dot blue"></span>
+        <span class="team-name" id="team1-name">Player 1</span>
+      </div>
+      <div class="score-center">
+        <div class="score" id="score-display">0 — 0</div>
+        <div class="timer" id="timer-display">1:30</div>
+      </div>
+      <div class="team-info team-right">
+        <span class="team-name" id="team2-name">Player 2</span>
+        <span class="team-dot red"></span>
+      </div>
+    </div>
+
+    <div class="canvas-wrap">
+      <canvas id="game-canvas"></canvas>
+      <div id="goal-flash" class="goal-flash hidden"></div>
+    </div>
+
+    <div class="bottom-bar">
+      <button id="btn-menu" class="back-btn">← Menu</button>
+      <div id="status-msg" class="status-msg"></div>
+      <button id="btn-restart" class="back-btn">Restart</button>
+    </div>
+  </div>
+
+  <!-- END SCREEN -->
+  <div id="end-screen" class="screen">
+    <div class="end-card">
+      <div class="trophy">🏆</div>
+      <h2 id="winner-text">Player 1 wins!</h2>
+      <div class="final-score" id="final-score">2 — 1</div>
+      <div class="end-buttons">
+        <button id="btn-rematch" class="mode-btn small">Rematch</button>
+        <button id="btn-end-menu" class="mode-btn small secondary">Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

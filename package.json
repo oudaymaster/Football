@@ -1,0 +1,17 @@
+{
+  "name": "2d-soccer-game",
+  "version": "1.0.0",
+  "description": "A 2D browser soccer game with 1v1 and vs AI modes",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "dev": "npx live-server ."
+  },
+  "keywords": ["soccer", "football", "game", "canvas", "2d"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "live-server": "^1.2.2",
+    "serve": "^14.2.0"
+  }
+}
