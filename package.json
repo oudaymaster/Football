@@ -1,17 +1,16 @@
 {
-  "name": "2d-soccer-game",
+  "name": "top-kick-3d-football",
   "version": "1.0.0",
-  "description": "A 2D browser soccer game with 1v1 and vs AI modes",
+  "description": "Top-down 3D 8v8 football (soccer) mini-game built with Three.js — WASD/joystick movement, shoot and tackle buttons, idle auto-play.",
   "main": "index.html",
   "scripts": {
-    "start": "npx serve .",
-    "dev": "npx live-server ."
+    "start": "npx http-server . -p 8080 -c-1 -o",
+    "dev": "npx http-server . -p 8080 -c-1 -o"
   },
-  "keywords": ["soccer", "football", "game", "canvas", "2d"],
+  "keywords": ["threejs", "webgl", "game", "football", "soccer"],
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "live-server": "^1.2.2",
-    "serve": "^14.2.0"
+    "http-server": "^14.1.1"
   }
 }
