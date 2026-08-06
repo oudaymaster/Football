@@ -1,286 +1,104 @@
-/* ─── Reset & Base ─── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html,body{margin:0;padding:0;overflow:hidden;background:#0a1220;font-family:'Segoe UI',Roboto,Arial,sans-serif;height:100%;width:100%;touch-action:none;}
+#canvas-wrap{position:fixed;inset:0;}
+canvas{display:block;}
 
-:root {
-  --green-dark:  #1a5c20;
-  --green-mid:   #226b29;
-  --green-light: #2d8a35;
-  --blue:        #4a8fe2;
-  --blue-dark:   #1a5fa0;
-  --red:         #e24b4a;
-  --red-dark:    #a02020;
-  --white:       #ffffff;
-  --off-white:   #f0f0f0;
-  --text-muted:  rgba(255,255,255,0.6);
-  --card-bg:     rgba(0,0,0,0.55);
-  --radius:      12px;
-  --radius-sm:   8px;
+/* ---------- Scoreboard ---------- */
+#scoreboard{
+  position:fixed;top:14px;left:50%;transform:translateX(-50%);
+  display:flex;align-items:center;gap:0;
+  background:linear-gradient(180deg,#111826 0%,#0b0f18 100%);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:10px;overflow:hidden;
+  box-shadow:0 8px 24px rgba(0,0,0,.45);
+  font-variant-numeric:tabular-nums;
+  z-index:20;
+}
+.sb-team{padding:8px 16px;font-weight:800;font-size:15px;letter-spacing:.06em;color:#e9edf5;}
+.sb-team.blue{background:#1c4fd6;}
+.sb-team.red{background:#c62b2b;}
+.sb-score{padding:8px 14px;font-weight:800;font-size:17px;color:#fff;min-width:36px;text-align:center;}
+.sb-clock{padding:8px 14px;font-size:13px;color:#9fb0c9;border-left:1px solid rgba(255,255,255,.08);border-right:1px solid rgba(255,255,255,.08);}
+
+/* ---------- Hint ---------- */
+#hint{
+  position:fixed;top:64px;left:50%;transform:translateX(-50%);
+  color:#cfd8e8;background:rgba(10,15,25,.55);border:1px solid rgba(255,255,255,.08);
+  padding:6px 12px;border-radius:8px;font-size:12px;letter-spacing:.02em;
+  z-index:20;transition:opacity 1s ease;pointer-events:none;
+  max-width:90vw;text-align:center;
 }
 
-html, body {
-  height: 100%;
-  font-family: 'Segoe UI', system-ui, sans-serif;
-  background: #111;
-  color: var(--white);
-  overflow: hidden;
+/* ---------- Goal flash ---------- */
+#goal-flash{
+  position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+  pointer-events:none;opacity:0;z-index:30;
+  font-size:min(14vw,90px);font-weight:900;letter-spacing:.08em;color:#fff;
+  text-shadow:0 0 30px rgba(255,220,80,.9),0 0 8px #000;
+  transition:opacity .25s ease, transform .4s cubic-bezier(.2,1.4,.4,1);
+  transform:scale(.7);
+}
+#goal-flash.show{opacity:1;transform:scale(1);}
+
+/* ---------- Joystick ---------- */
+#joy-base{
+  position:fixed;left:26px;bottom:26px;width:120px;height:120px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%, rgba(255,255,255,.10), rgba(255,255,255,.03) 60%);
+  border:2px solid rgba(255,255,255,.25);
+  touch-action:none;z-index:25;
+}
+#joy-nub{
+  position:absolute;left:50%;top:50%;width:52px;height:52px;border-radius:50%;
+  background:linear-gradient(180deg,#3f78ff,#1c4fd6);
+  box-shadow:0 4px 14px rgba(0,0,0,.5);
+  transform:translate(-50%,-50%);
+  pointer-events:none;
 }
 
-/* ─── Screens ─── */
-.screen {
-  position: fixed;
-  inset: 0;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+/* ---------- Shoot button ---------- */
+#shoot-btn{
+  position:fixed;right:30px;bottom:34px;width:96px;height:96px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%, #ff6a52, #c62b2b);
+  border:2px solid rgba(255,255,255,.3);
+  color:#fff;font-weight:800;font-size:14px;letter-spacing:.04em;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 8px 20px rgba(198,43,43,.4);
+  z-index:25;user-select:none;touch-action:none;
 }
-.screen.active { display: flex; }
+#shoot-btn:active{transform:scale(.92);}
 
-/* ─── Menu Screen ─── */
-#menu-screen {
-  background: linear-gradient(160deg, var(--green-dark) 0%, #0d3b12 100%);
+/* ---------- Tackle button ---------- */
+#tackle-btn{
+  position:fixed;right:150px;bottom:46px;width:78px;height:78px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%, #ffd15c, #d69a1f);
+  border:2px solid rgba(255,255,255,.3);
+  color:#231600;font-weight:800;font-size:12px;letter-spacing:.03em;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 8px 20px rgba(214,154,31,.4);
+  z-index:25;user-select:none;touch-action:none;
 }
+#tackle-btn:active{transform:scale(.92);}
 
-.pitch-bg {
-  position: absolute;
-  inset: 0;
-  background-image:
-    repeating-linear-gradient(
-      90deg,
-      rgba(255,255,255,0.03) 0px,
-      rgba(255,255,255,0.03) 60px,
-      transparent 60px,
-      transparent 120px
-    );
-  pointer-events: none;
+#controls-legend{
+  position:fixed;left:26px;top:14px;z-index:20;color:#8ea0bd;font-size:11px;
+  background:rgba(10,15,25,.5);border:1px solid rgba(255,255,255,.07);padding:8px 10px;border-radius:8px;
+  line-height:1.6;
 }
+#controls-legend b{color:#dfe7f5;}
 
-.menu-card {
-  position: relative;
-  background: var(--card-bg);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius: var(--radius);
-  padding: 36px 40px;
-  max-width: 420px;
-  width: 90%;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  text-align: center;
+#fulltime{
+  position:fixed;inset:0;background:rgba(6,9,16,.78);display:none;
+  align-items:center;justify-content:center;flex-direction:column;gap:10px;z-index:40;
+  color:#fff;
+}
+#fulltime h1{font-size:min(9vw,54px);margin:0;letter-spacing:.05em;}
+#fulltime p{color:#a9b7cc;margin:0 0 10px 0;}
+#fulltime button{
+  background:#1c4fd6;color:#fff;border:none;padding:12px 26px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;
 }
 
-.logo { display: flex; flex-direction: column; align-items: center; gap: 6px; }
-.ball-icon { font-size: 48px; line-height: 1; }
-.logo h1 { font-size: 32px; font-weight: 700; letter-spacing: -0.5px; }
-.tagline { font-size: 14px; color: var(--text-muted); }
-
-.mode-buttons { display: flex; flex-direction: column; gap: 12px; }
-
-.mode-btn {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 16px 20px;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.15);
-  border-radius: var(--radius-sm);
-  color: var(--white);
-  cursor: pointer;
-  transition: background 0.15s, border-color 0.15s, transform 0.1s;
-  text-align: left;
-  width: 100%;
-}
-.mode-btn:hover {
-  background: rgba(255,255,255,0.15);
-  border-color: rgba(255,255,255,0.3);
-  transform: translateY(-1px);
-}
-.mode-btn:active { transform: scale(0.98); }
-.mode-btn.secondary { background: rgba(255,255,255,0.04); }
-
-.mode-btn.small {
-  padding: 12px 24px;
-  justify-content: center;
-  flex: 1;
-}
-
-.mode-icon { font-size: 26px; flex-shrink: 0; }
-.mode-label { font-size: 17px; font-weight: 600; }
-.mode-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; display: block; }
-
-.mode-btn .mode-label,
-.mode-btn .mode-sub {
-  display: block;
-}
-
-.rules {
-  font-size: 13px;
-  color: var(--text-muted);
-}
-
-.controls-legend {
-  background: rgba(255,255,255,0.05);
-  border-radius: var(--radius-sm);
-  padding: 12px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  text-align: left;
-}
-.ctrl-row { font-size: 13px; color: var(--text-muted); }
-.ctrl-row strong { color: var(--white); }
-
-/* ─── Game Screen ─── */
-#game-screen {
-  background: #111;
-  gap: 0;
-  flex-direction: column;
-  justify-content: flex-start;
-  padding: 12px;
-}
-
-.game-ui {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 700px;
-  padding: 0 4px 10px;
-}
-
-.team-info {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.team-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-.team-dot.blue { background: var(--blue); }
-.team-dot.red  { background: var(--red); }
-
-.score-center {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-}
-
-.score {
-  font-size: 26px;
-  font-weight: 700;
-  letter-spacing: 2px;
-}
-
-.timer {
-  font-size: 13px;
-  color: var(--text-muted);
-  font-variant-numeric: tabular-nums;
-}
-
-.canvas-wrap {
-  position: relative;
-  border-radius: var(--radius-sm);
-  overflow: hidden;
-  border: 2px solid rgba(255,255,255,0.1);
-  max-width: 700px;
-  width: 100%;
-}
-
-#game-canvas {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-.goal-flash {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 48px;
-  font-weight: 900;
-  letter-spacing: 4px;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.1s;
-}
-.goal-flash.show { opacity: 1; animation: flashAnim 1.4s ease-out forwards; }
-.goal-flash.hidden { display: none; }
-
-@keyframes flashAnim {
-  0%   { opacity: 1; transform: scale(1.4); }
-  30%  { opacity: 1; transform: scale(1); }
-  80%  { opacity: 0.9; }
-  100% { opacity: 0; }
-}
-
-.bottom-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 700px;
-  padding: 10px 4px 0;
-}
-
-.back-btn {
-  padding: 8px 16px;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.15);
-  border-radius: var(--radius-sm);
-  color: var(--white);
-  font-size: 13px;
-  cursor: pointer;
-  transition: background 0.15s;
-}
-.back-btn:hover { background: rgba(255,255,255,0.15); }
-
-.status-msg {
-  font-size: 14px;
-  font-weight: 600;
-  color: #f5c518;
-  min-height: 20px;
-  text-align: center;
-}
-
-/* ─── End Screen ─── */
-#end-screen {
-  background: rgba(0,0,0,0.85);
-}
-
-.end-card {
-  background: var(--card-bg);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius: var(--radius);
-  padding: 40px 48px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  max-width: 340px;
-  width: 90%;
-}
-
-.trophy { font-size: 56px; }
-.end-card h2 { font-size: 26px; font-weight: 700; }
-.final-score { font-size: 40px; font-weight: 700; letter-spacing: 4px; color: var(--off-white); }
-.end-buttons { display: flex; gap: 12px; width: 100%; margin-top: 8px; }
-
-/* ─── Responsive ─── */
-@media (max-width: 480px) {
-  .menu-card { padding: 24px 20px; }
-  .logo h1 { font-size: 26px; }
-  .score { font-size: 20px; }
-  .end-card { padding: 28px 24px; }
+@media (max-width:520px){
+  #controls-legend{display:none;}
+  #joy-base{width:104px;height:104px;left:18px;bottom:18px;}
+  #shoot-btn{width:84px;height:84px;right:18px;bottom:22px;}
+  #tackle-btn{width:68px;height:68px;right:112px;bottom:32px;}
 }
